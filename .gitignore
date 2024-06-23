@@ -1,5 +1,8 @@
 # Prerequisites
 *.d
+.idea
+.vscode
+cmake-build-debug
 
 # Object files
 *.o
