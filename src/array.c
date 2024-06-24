@@ -42,8 +42,15 @@ void push_##type##_array(array_##type* dst, const type item) { \
 \
 void push_array_##type##_arr_array(array_##type* dst, array_##type* src) { \
     const size_t total_len = dst->len + src->len; \
-    if (total_len > dst->capacity) { \
-        dst->arr = (type*)realloc(dst->arr, sizeof(type) * (total_len + CAPACITY_RESERVED)); \
+    if (total_len > dst->capacity) {                                       \
+        type* temp = (type*)realloc(dst->arr, sizeof(type) * (total_len + CAPACITY_RESERVED));\
+        if (temp == NULL) {     \
+            free(dst->arr);     \
+            free(temp);                    \
+            printf("ERROR: Failed to allocate more memory for an array");   \
+            exit(1);\
+        }                       \
+        dst->arr = temp; \
         dst->capacity = total_len + CAPACITY_RESERVED; \
     } \
     memcpy(dst->arr + dst->len, src->arr, src->len * sizeof(type)); \
@@ -59,4 +66,4 @@ void print_##type##_array(array_##type* arr) { \
     } \
 }
 
-DEFINE_ARRAY_TYPE(int);
+//DEFINE_ARRAY_TYPE(int);
